@@ -1,2 +1,11 @@
-LLM Nedir ?
-Large Language Model : Büyük Dil Modeli
+LLM Nedir ?Büyük Dil Modeli (LLM), devasa miktarda metin verisi ve derin öğrenme (özellikle Transformer mimarisi) teknikleri kullanılarak eğitilmiş gelişmiş bir yapay zeka modelidir.
+Large Language Model : Büyük Dil Modeli emel Özellikleri ve Çalışma Mantığı:
+- Dil Anlama ve Üretme: İnsan dilindeki bağlamı, grameri ve anlamsal ilişkileri kavrayarak doğal, mantıklı ve akıcı metinler üretebilir.
+- Olasılıksal Tahmin: Bir metinde geçen önceki sözcükleri analiz ederek bir sonraki en olası kelimeyi tahmin etme prensibiyle çalışır.
+- Geniş Görev Yelpazesi: Metin yazma, özetleme, çeviri yapma, kod yazma/hata ayıklama, soru yanıtlama ve duygu analizi gibi çok sayıda doğal dil işleme (NLP) görevini yerine getirebilir.
+
+Popüler Örnekler:
+- OpenAI: GPT-4, GPT-3.5
+- Google: Gemini (önceki adıyla PaLM)
+- Meta: LLaMA
+- Anthropic: Claude
