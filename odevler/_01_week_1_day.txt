@@ -1,4 +1,0 @@
-LLM Nedir ?
-Large Language Model : Büyük Dil Modeli 
-LLM:Devasa miktarda metin verisiyle eğitilmiş ,insan dilini anlama,metin üretme ve sorulara cevap verme yeteneğine sahip yapay zekadır.
-örnek: ChatGBT,Gemini.
