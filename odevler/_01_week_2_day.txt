@@ -1,3 +1,15 @@
-AI-ML-DL farklar
-RAG nedir ?
-Fine Tuning
+AI-ML-DL farklar * AI (Artificial Intelligence - Yapay Zeka): İnsan zekasını, problem çözme ve karar verme yeteneklerini taklit eden tüm sistem ve yaklaşımları kapsayan en genel şemsiye terimdir.
+* ML (Machine Learning - Makine Öğrenimi): Yapay zekanın bir alt dalıdır. Sistemlerin açıkça programlanmadan, geçmiş verileri analiz ederek örüntüleri öğrenmesini ve bu örüntüler üzerinden tahminlerde bulunmasını sağlar (Örn: Karar ağaçları, regresyon, SVM).
+* DL (Deep Learning - Derin Öğrenme): Makine öğreniminin çok katmanlı yapay sinir ağları (Artificial Neural Networks) kullanan bir alt kümesidir. Çok büyük veri kümeleri ve yüksek işlem gücüyle çalışır; görüntü işleme, ses tanıma ve LLM'ler gibi karmaşık problemlerde doğrudan ham veriden temsil öğrenir.
+
+Özetle: DL ⊂ ML ⊂ AI (Derin Öğrenme, Makine Öğreniminin; Makine Öğrenimi ise Yapay Zekanın bir parçasıdır).
+RAG nedir ? RAG, büyük dil modellerinin (LLM) bilgi sınırlarını aşmak, güncel kalmasını sağlamak ve halüsinasyonları (yanlış bilgi üretimini) azaltmak için harici bir bilgi kaynağı ile birleştirilmesidir.
+
+* Çalışma Mantığı:
+  1. Kullanıcı bir soru sorar.
+  2. Sistem, harici bir veritabanında (genellikle vektör veri tabanlarında) soruyla en alakalı dokümanları arar ve çeker (Retrieval).
+  3. Çekilen bu referans bilgiler, kullanıcının sorusuyla birlikte modele bağlam (context) olarak iletilir.
+  4. Model, gelen bu spesifik kaynakları referans alarak doğru ve tutarlı bir yanıt üretir (Generation).
+Fine Tuning ine-Tuning, devasa genel verilerle önceden eğitilmiş temel bir yapay zeka modelinin (Foundation Model), belirli bir görev, alan veya format üzerinde uzmanlaşması için daha küçük, hedefe yönelik ve etiketli bir veri setiyle yeniden eğitilmesidir.
+
+* Temel Amaç: Modeli sıfırdan eğitmek yerine (ki bu devasa maliyet ve zaman gerektirir), modelin mevcut dil ve muhakeme yeteneklerini koruyarak tıbbi terimler, hukuk metinleri, şirket içi üslup veya belirli bir kodlama stili gibi niş alanlara tam uyumlu hale getirmektir.
