@@ -1,3 +1,3 @@
-AI-ML-DL farklar
-RAG nedir ?
-Fine Tuning
+AI-ML-DL farklar AI en geniş çatı kavramdır, ML veriden öğrenen algoritmaları kapsar, DL ise çok katmanlı yapay sinir ağlarını kullanarak büyük veriyi işleyen ML alt kümesidir.
+RAG nedir ? LLM'lerin kendi eğitim verisinde olmayan harici veya güncel verileri vektör veritabanından çekip bağlama ekleyerek doğru yanıt üretmesini sağlayan mimaridir.
+Fine Tuning önceden eğitilmiş bir temel modelin belirli bir uzmanlık alanına, veri setine veya çıktı formatına göre ağırlıklarının yeniden eğitilerek uyarlanmasıdır.
