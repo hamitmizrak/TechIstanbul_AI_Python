@@ -70,6 +70,7 @@ from typing import Optional, List, Dict, Any
 import numpy as np
 import pandas as pd
 from colorama import Fore
+from numpy.random.mtrand import choice
 from sklearn.pipeline import Pipeline
 
 
@@ -166,7 +167,6 @@ def print_step_title(text:str) -> None:
     print(Fore.CYAN + Style.BRIGHT+ text + Style.RESET_ALL)
 
 
-
 # -----------------------------------------------------------------------------
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
@@ -204,7 +204,6 @@ def normalize_column_name(name:str) -> str:
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
 # discover_csv_files fonskiyonu kullanicini dosya seçebilmesini için CSV dosyalarını tarar ve sadece görününe CSV dosyalarını eklemeye yani dinamik olarak csv dosyalarını seçmeye yarar.
-
 def discover_csv_files() -> List[Path]:
     found: List[Path] = []
 
@@ -222,3 +221,46 @@ def discover_csv_files() -> List[Path]:
             if resolved not in found:
                 found.append(resolved)
     return sorted(found, key=lambda p: p.name.lower())
+
+
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+# Manuel olarak (Copy/Pasce) olarak girilen yolu seçmek
+def choose_csv_path() -> Optional[Path]:
+    print_header("CSV DOSYASINI SEÇ")
+
+    print_menu_option("0 -Ana menüye dön")
+    print_menu_option("1 -Dosya yolunu manuel gir")
+    print_menu_option("2 -Dosya yolunu dosya seçerek gir")
+
+    choice =input("\nSeçiminiz: ").strip()
+
+    if choice == "0":
+        return None
+
+    if choice == "1":
+        raw_path = input(
+            "\nCSV dosyasını tam yolunu giriniz: "
+        ).strip().strip('"')
+
+        if not raw_path:
+            print("\nHATA: Dosya yolu boş bırakılamaz.")
+            return None
+
+        path = Path(raw_path).expanduser()
+
+        if not path.exists():
+            print("\nHATA Girilen dosya bulunamadı")
+            return None
+
+        if not path.is_file():
+            print("\nHATA Girilen yol dosya değil")
+            return None
+
+        if not path.suffix.lower() != ".csv":
+            print("\nHATA Girilen dosya CSV uzantılı değil")
+            return None
+
+        print(f"\nSeçilen CSV dosyasi:\n{path.resolve()}")
+        return path.resolve()
