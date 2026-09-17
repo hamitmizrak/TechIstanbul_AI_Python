@@ -366,12 +366,10 @@ def read_csv_safely(path:Path) -> pd.DataFrame:
     )
 
 
-
 # -----------------------------------------------------------------------------
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
 # load_csv
-
 def load_csv(state: AppState) ->None:
     path = choose_csv_path()
 
@@ -457,6 +455,16 @@ def load_csv(state: AppState) ->None:
     except Exception as exc:
         print(f"\nHATA: CSV yüklenmedi. \n{exc}")
 
+
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+# CSV dosyası yüklenmeden menü çalışmasını engelle
+def require_data(state: AppState) -> bool:
+    if state.df is None:
+        print("\nÖnce bir CSV dosyasını yüklemelisiniz.")
+        return False
+    return True
 
 
 
