@@ -132,7 +132,6 @@ class AppState:
         self.last_pdf_report_path: Optional[Path] = None
 
 
-
 # -----------------------------------------------------------------------------
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
@@ -151,6 +150,7 @@ def print_header(title:str) -> None:
 def pause() -> None:
     input("\nDevam etmek için lütfen ENTER tuşuna basınız...")
 
+
 # -----------------------------------------------------------------------------
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
@@ -158,4 +158,67 @@ def pause() -> None:
 def print_menu_option(text:str) -> None:
     print(Fore.LIGHTCYAN_EX + text + Style.RESET_ALL)
 
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+# print_step_title fonskiyon STEP başlıklarını menu seçeneklerinden ayırmak için parlak camgöbeği renkte gösterir.
+def print_step_title(text:str) -> None:
+    print(Fore.CYAN + Style.BRIGHT+ text + Style.RESET_ALL)
 
+
+
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+# CSV sutun adlarını daha düzenli hale getirmek
+# Ornek:
+# " KeliME Sayısi " -> "kelime_sayisi"
+# Bu sayede sutun isimlerindeki boşluk, büyük/küçük harf farklarlarından kaynaklanan hataları azaltmak
+def normalize_column_name(name:str) -> str:
+    value = str(name).replace("\ufeff","").strip().lower()
+
+    replacements = {
+        "ç": "c",
+        "ğ": "g",
+        "ı": "i",
+        "ö": "o",
+        "ş": "s",
+        "ü": "u",
+        " ": "_",
+        "-": "_",
+        "/": "_",
+        "\\": "_",
+    }
+
+    for old, new in replacements.items():
+        value = value.replace(old,new)
+
+    while "__" in value:
+        value= value.replace("__","_")
+
+    return value.strip("_")
+
+
+
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+# discover_csv_files fonskiyonu kullanicini dosya seçebilmesini için CSV dosyalarını tarar ve sadece görününe CSV dosyalarını eklemeye yani dinamik olarak csv dosyalarını seçmeye yarar.
+
+def discover_csv_files() -> List[Path]:
+    found = List[Path] = []
+
+    search_dirs = [
+        Path.cwd(),
+        Path.cwd() / "data"
+    ]
+
+    for folder in search_dirs:
+        if not folder.exists() or not folder.is_dir():
+            continue
+
+        for file_path in folder.glob("*.csv"):
+            resolved = file_path.resolve()
+            if resolved not in found:
+                found.append(resolved)
+    return sorted(found, key=lambda p: p.name.lower())
