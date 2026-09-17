@@ -70,7 +70,6 @@ from typing import Optional, List, Dict, Any
 import numpy as np
 import pandas as pd
 from colorama import Fore
-from numpy.random.mtrand import choice
 from sklearn.pipeline import Pipeline
 
 
@@ -230,11 +229,29 @@ def discover_csv_files() -> List[Path]:
 def choose_csv_path() -> Optional[Path]:
     print_header("CSV DOSYASINI SEÇ")
 
+    # -----------------------------------------------------------------
+    # BU MENU NE ISE YARAR?
+    # -----------------------------------------------------------------
+    # Kullanici CSV dosyasini iki farkli yontemle secebilir:
+    #
+    # 0 - Ana menuye don
+    #     CSV secmeden STEP 1 ana menusune geri doner.
+    #
+    # 1 - Dosya yolunu manuel gir
+    #     Kullanici CSV dosyasinin tam yolunu klavyeden yazar.
+    #
+    #     Ornek:
+    #         E:\ML\veriler\spam.csv
+    #
+    # 2 - Dosya yolunu dosya secerek gir
+    #     Windows/Linux dosya secme penceresi acilir.
+    #     Kullanici CSV dosyasini tiklayarak secer.
+    # -----------------------------------------------------------------
     print_menu_option("0 -Ana menüye dön")
     print_menu_option("1 -Dosya yolunu manuel gir")
     print_menu_option("2 -Dosya yolunu dosya seçerek gir")
 
-    choice =input("\nSeçiminiz: ").strip()
+    choice = input("\nSeciminiz: ").strip()
 
     if choice == "0":
         return None
@@ -247,7 +264,8 @@ def choose_csv_path() -> Optional[Path]:
         if not raw_path:
             print("\nHATA: Dosya yolu boş bırakılamaz.")
             return None
-
+        # expanduser : kısayolları gerçek klasor yoluna çevirmeye yarar.
+        # ~\Desktop\veri.csv C:\Users\Data\Desktop\veri.csv
         path = Path(raw_path).expanduser()
 
         if not path.exists():
@@ -258,9 +276,63 @@ def choose_csv_path() -> Optional[Path]:
             print("\nHATA Girilen yol dosya değil")
             return None
 
-        if not path.suffix.lower() != ".csv":
+        if  path.suffix.lower() != ".csv":
             print("\nHATA Girilen dosya CSV uzantılı değil")
             return None
 
         print(f"\nSeçilen CSV dosyasi:\n{path.resolve()}")
         return path.resolve()
+
+    # -----------------------------------------------------------------
+    # BU MENU NE ISE YARAR?
+    # -----------------------------------------------------------------
+    # tkinter: Python standart kütüphanelerinde birindir
+    # Kullanıcının fare ile dosya seçerek programa aktarılmasıdır.
+    if choice == "2":
+        try:
+            import tkinter as tk
+            from tkinter import filedialog
+
+            root = tk.Tk()
+            root.withdraw()
+
+            # Dosya seçme penceresinin arkada kalmasını engelemeye çalışır.
+            try:
+                root.attributes("-topmost",True)
+            except Exception:
+                pass
+
+            selected_file = filedialog.askopenfilename(
+                title="CSV Dosyasını Seç",
+                filetypes=[
+                    ("CSV Dosyaları", "*.csv"),
+                    ("Tüm Dosyalar", "*.*"),
+                ]
+            )
+
+            root.destroy()
+
+            if not selected_file:
+                print("\nDosya seçimi iptal edildi")
+                return None
+
+            path = Path(selected_file)
+
+            if not path.exists():
+                print("\nHATA: Seçilen dosya bulunamadı")
+                return None
+
+            if  path.suffix.lower() != ".csv":
+                print("\nLütfen CSV uzantıli bir dosya seçiniz.")
+                return None
+
+            print(f"\nSeçilen CSV dosyasi:\n{path.resolve()}")
+            return path.resolve()
+        except ImportError:
+            print(
+                "\nHATA: Bu python sürümünde tkinter bulunamadı.\n"
+                "alternatif oarlak 1- Dosya yolunu manuel gir seçeneğinide kullanabilirsiniz "
+            )
+            return None
+    print("\nHATA: 0<=X<=2 arasında tam sayı seçemlsiniz yani 0,1,2 kullanabilirsiniz")
+    return None
