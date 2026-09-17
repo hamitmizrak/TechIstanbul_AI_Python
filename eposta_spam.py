@@ -70,6 +70,7 @@ from typing import Optional, List, Dict, Any
 import numpy as np
 import pandas as pd
 from colorama import Fore
+
 from sklearn.pipeline import Pipeline
 
 
@@ -342,9 +343,10 @@ def choose_csv_path() -> Optional[Path]:
 # -----------------------------------------------------------------------------
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
-#
+# CSV dosyasını pandas DataFrame formatında okur.
+# Separator: Virgül, noktalı virgül vb pandas tarafıdnan otomatik oalrak tahmin etmesine yardımcı olan
 def read_csv_safely(path:Path) -> pd.DataFrame:
-    encodings =["utf-8-sig", "utf-8", "latin-1"]
+    encodings =[ "utf-8", "utf-8-sig", "latin-1"]
 
     last_error = None
 
@@ -362,3 +364,99 @@ def read_csv_safely(path:Path) -> pd.DataFrame:
     raise RuntimeError(
         f"CSV dosyayi okunamadi. Son hata: {last_error}"
     )
+
+
+
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+# load_csv
+
+def load_csv(state: AppState) ->None:
+    path = choose_csv_path()
+
+    if path is None:
+        return
+
+    try:
+        df = read_csv_safely(path)
+
+        if df.empty:
+            print("\nHATA: CSV dosyasi boş")
+            return
+
+        df.columns = [normalize_column_name(col) for col in df.columns]
+
+        state.csv_path=path
+        state.raw_df= df.copy(deep=True)
+        state.df= df.copy(deep=True)
+
+        state.target_column = None
+        state.feature_columns = []
+
+        state.best_model = None
+        state.best_model_name = None
+
+        state.X_test = None
+        state.y_test = None
+        state.y_pred = None
+
+        state.model_results=[]
+
+        state.current_step =2
+        state.preprocessing_completed =False
+        state.cleaned_csv_path = None
+        state.active_data_source ="original"
+
+        print_header("CSV BASŞARIYLA YÜKLENDİ")
+
+        file_size_kb = path.stat().st_size /1024
+        missing_total = int(df.isna().sum().sum())
+        duplicated_total = int(df.duplicated().sum())
+
+        numeric_columns = df.select_dtypes(include=[np.number]).columns.tolist()
+        categorical_columns=[
+            column for column in df.columns
+            if column not in numeric_columns
+        ]
+
+        target_column = "spam" if "spam" in df.columns else None
+        features_columns = [
+            column for column in df.columns
+            if column != target_column
+        ]
+
+        print(f"Dosya Adı:              {path.name}")
+        print(f"Dosya Yolu:             {path}")
+        print(f"Dosya Boyutu:           {file_size_kb:.2f} KB")
+        print(f"Dosya Satır sayısı:     {len(df)}")
+        print(f"Dosya Sutun sayısı:     {len(numeric_columns)}")
+        print(f"Kategorik Sutun   :     {len(categorical_columns)}")
+        print(f"Eksik Değer  :          {missing_total}")
+        print(f"Duplicate Satır  :      {duplicated_total}")
+
+        if target_column:
+            print(f"Target / Label      : {target_column}")
+            print(f"Problem Türü        : classification")
+            print(f"Feature Sayısı      : {len(features_columns)}")
+
+        else :
+            print(f"Target / Label      :  BULUNAMADI ")
+            print(f"Problem Türü      : Belirtilmedi")
+            print(f"UYARI     :  CSV içinde 'spam' sutunu bulunamadı")
+
+        print("\nFeature Sutunları")
+        for column in features_columns:
+            print(f"- {column}")
+
+        if target_column:
+            print("\nTarget / Label")
+            print(f"- {target_column}")
+
+        print("\nCSV kullanima hazir")
+    except Exception as exc:
+        print(f"\nHATA: CSV yüklenmedi. \n{exc}")
+
+
+
+
