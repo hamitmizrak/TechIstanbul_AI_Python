@@ -206,7 +206,7 @@ def normalize_column_name(name:str) -> str:
 # discover_csv_files fonskiyonu kullanicini dosya seçebilmesini için CSV dosyalarını tarar ve sadece görününe CSV dosyalarını eklemeye yani dinamik olarak csv dosyalarını seçmeye yarar.
 
 def discover_csv_files() -> List[Path]:
-    found = List[Path] = []
+    found: List[Path] = []
 
     search_dirs = [
         Path.cwd(),
