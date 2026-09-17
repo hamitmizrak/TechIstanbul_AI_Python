@@ -226,6 +226,7 @@ def discover_csv_files() -> List[Path]:
 # BU KOD NE ISE YARAR?
 # -----------------------------------------------------------------------------
 # Manuel olarak (Copy/Pasce) olarak girilen yolu seçmek
+#  Seçeneklerden
 def choose_csv_path() -> Optional[Path]:
     print_header("CSV DOSYASINI SEÇ")
 
@@ -336,3 +337,28 @@ def choose_csv_path() -> Optional[Path]:
             return None
     print("\nHATA: 0<=X<=2 arasında tam sayı seçemlsiniz yani 0,1,2 kullanabilirsiniz")
     return None
+
+
+# -----------------------------------------------------------------------------
+# BU KOD NE ISE YARAR?
+# -----------------------------------------------------------------------------
+#
+def read_csv_safely(path:Path) -> pd.DataFrame:
+    encodings =["utf-8-sig", "utf-8", "latin-1"]
+
+    last_error = None
+
+    for encoding in encodings:
+        try:
+            return pd.read_csv(
+                path,
+                sep=None,
+                engine="python",
+                encoding=encoding
+            )
+        except Exception as exc:
+            last_error =exc
+
+    raise RuntimeError(
+        f"CSV dosyayi okunamadi. Son hata: {last_error}"
+    )
